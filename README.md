@@ -1,7 +1,6 @@
 # PathTracing-MultiSample-test
 A Test/gathering feedback for adding Multi-Sampling (more than 1 sample per animation frame) to the three.js PathTracing Renderer.
 Game Engine Path Tracer 
-
 <br>
 <h4>Added Controls (Desktop Only)</h4>
 
