@@ -4,8 +4,8 @@ Game Engine Path Tracer
 <br>
 <h4>Added Controls (Desktop Only)</h4>
 
-* '-' and '+' -> Decrease/Increase Samples per frame (range: 1-100, note: a powerful dedicated GPU is needed beyond 8 samples)
-* '<' and '>' -> Decrease/Increase amount of previous Frame Blending (range: 0.0 - 0.98, not quite 1.0 or the image would never update)
+* '-' and '+'  --> Decrease/Increase Samples per frame (range: 1-100, note: a powerful dedicated GPU is needed beyond 8 samples)
+* '<' and '>'  --> Decrease/Increase amount of previous Frame Blending (range: 0.0 - 0.98, not quite 1.0 or the image would never update)
 <br><br>
 
 <h2>LIVE MULTI-SAMPLE DEMOS</h2>
