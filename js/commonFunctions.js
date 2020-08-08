@@ -676,12 +676,12 @@ function animate() {
                         cameraIsMoving = true;
                         decreaseFrameBlend = false;
                 }
-                
+
                 if ( !cameraIsMoving ) {
                 
                         if (sceneIsDynamic)
-                                sampleCounter = 1.0; // reset for continuous updating of image
-                        else sampleCounter += 1.0; // for progressive refinement of image
+                                sampleCounter = samplesPerFrame; // reset for continuous updating of image
+                        else sampleCounter += samplesPerFrame; // for progressive refinement of image
                         
                         frameCounter += 1.0;
         
@@ -689,7 +689,7 @@ function animate() {
                 }
         
                 if (cameraIsMoving) {
-                        sampleCounter = 1.0;
+                        sampleCounter = samplesPerFrame;
                         frameCounter += 1.0;
         
                         if (!cameraRecentlyMoving) {
