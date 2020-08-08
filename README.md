@@ -10,8 +10,8 @@ Game Engine Path Tracer
 
 <h2>LIVE MULTI-SAMPLE DEMOS</h2>
 
-* [Game Engine PathTracer Demo](https://erichlof.github.io/PathTracing-MultiSample-test/GameEngine_PathTracer.html)
+* [Game Engine PathTracer Demo](https://erichlof.github.io/PathTracing-MultiSample-test/GameEngine_PathTracer.html) Shows a Dynamic scene
 
-* [Bi-Directional PathTracer Demo](https://erichlof.github.io/PathTracing-MultiSample-test/Bi-Directional_PathTracing.html)
+* [Bi-Directional PathTracer Demo](https://erichlof.github.io/PathTracing-MultiSample-test/Bi-Directional_PathTracing.html) Shows a Static scene
 
-* [Transforming Quadric Geometry Demo](https://erichlof.github.io/PathTracing-MultiSample-test/Transforming_Quadric_Geometry_Showcase.html)
+* [Transforming Quadric Geometry Demo](https://erichlof.github.io/PathTracing-MultiSample-test/Transforming_Quadric_Geometry_Showcase.html) Shows another Dynamic scene
