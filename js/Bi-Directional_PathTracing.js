@@ -42,6 +42,8 @@ function initPathTracingShaders() {
                 uVLen: { type: "f", value: 1.0 },
                 uApertureSize: { type: "f", value: 0.0 },
                 uFocusDistance: { type: "f", value: focusDistance },
+                uSamplesPerFrame: { type: "f", value: samplesPerFrame },
+                uFrameBlendingAmount: { type: "f", value: frameBlendingAmount },
         
                 uResolution: { type: "v2", value: new THREE.Vector2() },
         
@@ -96,28 +98,6 @@ function createPathTracingMaterial() {
 // called automatically from within the animate() function
 function updateVariablesAndUniforms() {
         
-        if ( !cameraIsMoving ) {
-                
-                if (sceneIsDynamic)
-                        sampleCounter = 1.0; // reset for continuous updating of image
-                else sampleCounter += 1.0; // for progressive refinement of image
-                
-                frameCounter += 1.0;
-
-                cameraRecentlyMoving = false;  
-        }
-
-        if (cameraIsMoving) {
-                sampleCounter = 1.0;
-                frameCounter += 1.0;
-
-                if (!cameraRecentlyMoving) {
-                        frameCounter = 1.0;
-                        cameraRecentlyMoving = true;
-                }
-        }
-
-        
         pathTracingUniforms.uCameraIsMoving.value = cameraIsMoving;
         pathTracingUniforms.uSampleCounter.value = sampleCounter;
         pathTracingUniforms.uFrameCounter.value = frameCounter;
@@ -127,7 +107,8 @@ function updateVariablesAndUniforms() {
         pathTracingUniforms.uCameraMatrix.value.copy(worldCamera.matrixWorld);
         screenOutputMaterial.uniforms.uOneOverSampleCounter.value = 1.0 / sampleCounter;
 
-        cameraInfoElement.innerHTML = "FOV: " + worldCamera.fov + " / Aperture: " + apertureSize.toFixed(2) + " / FocusDistance: " + focusDistance + "<br>" + "Samples: " + sampleCounter;
+        cameraInfoElement.innerHTML = "FOV: " + worldCamera.fov + " / Aperture: " + apertureSize.toFixed(2) + " / FocusDistance: " + focusDistance + 
+                "<br>" + "SamplesPerFrame: " + Math.floor(samplesPerFrame) + " / FrameBlendingAmount: " + frameBlendingAmount.toFixed(2) + "Samples: " + sampleCounter;
 
 } // end function updateUniforms()
 
