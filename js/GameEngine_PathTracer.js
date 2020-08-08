@@ -127,7 +127,7 @@ function updateVariablesAndUniforms() {
         // CAMERA
         cameraControlsObject.updateMatrixWorld(true);
         pathTracingUniforms.uCameraMatrix.value.copy(worldCamera.matrixWorld);
-        screenOutputMaterial.uniforms.uOneOverSampleCounter.value = 1.0 / sampleCounter;
+        screenOutputMaterial.uniforms.uOneOverSampleCounter.value = samplesPerFrame / sampleCounter;
 
         cameraInfoElement.innerHTML = "FOV: " + worldCamera.fov + " / Aperture: " + apertureSize.toFixed(2) + " / FocusDistance: " + focusDistance + 
                 "<br>" + "SamplesPerFrame: " + Math.floor(samplesPerFrame) + " / FrameBlendingAmount: " + frameBlendingAmount.toFixed(2);
