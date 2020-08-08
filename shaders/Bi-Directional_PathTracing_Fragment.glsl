@@ -625,4 +625,85 @@ void SetupScene(void)
 }
 
 
-#include <pathtracing_main>
+//#include <pathtracing_main>
+float tentFilter(float x)
+{
+	return (x < 0.5) ? sqrt(2.0 * x) - 1.0 : 1.0 - sqrt(2.0 - (2.0 * x));
+}
+
+void main( void )
+{
+	Ray ray;
+
+	// not needed, three.js has a built-in uniform named cameraPosition
+	//vec3 camPos   = vec3( uCameraMatrix[3][0],  uCameraMatrix[3][1],  uCameraMatrix[3][2]);
+	
+	vec3 camRight   = vec3( uCameraMatrix[0][0],  uCameraMatrix[0][1],  uCameraMatrix[0][2]);
+	vec3 camUp      = vec3( uCameraMatrix[1][0],  uCameraMatrix[1][1],  uCameraMatrix[1][2]);
+	vec3 camForward = vec3(-uCameraMatrix[2][0], -uCameraMatrix[2][1], -uCameraMatrix[2][2]);
+	
+	vec3 previousColor = texelFetch(tPreviousTexture, ivec2(gl_FragCoord.xy), 0).rgb;
+	vec3 accumColor = vec3(0);
+	vec3 rayDir, focalPoint, randomAperturePos, finalRayDir, pixelColor;
+
+	vec2 pixelPos, pixelOffset;
+	uvec2 seed;
+
+	float x, y, randomAngle, randomRadius;
+	
+	
+	SetupScene();
+
+	for (float i = 0.0; i < uSamplesPerFrame; i++)
+	{
+		// seed for rand(seed) function
+		seed = uvec2(uFrameCounter * uSamplesPerFrame + i, uFrameCounter * uSamplesPerFrame + i + 1.0) * uvec2(gl_FragCoord);
+
+		pixelPos = vec2(0);
+		pixelOffset = vec2(0);
+
+		x = rand(seed);
+		y = rand(seed);
+
+		pixelOffset.x = tentFilter(x);
+		pixelOffset.y = tentFilter(y);
+		
+		// pixelOffset ranges from -1.0 to +1.0, so only need to divide by half resolution
+		pixelOffset /= (uResolution * 0.5);
+
+		// we must map pixelPos into the range -1.0 to +1.0
+		pixelPos = (gl_FragCoord.xy / uResolution) * 2.0 - 1.0;
+		pixelPos += pixelOffset;
+
+		rayDir = normalize( pixelPos.x * camRight * uULen + pixelPos.y * camUp * uVLen + camForward );
+
+		// depth of field
+		focalPoint = uFocusDistance * rayDir;
+		randomAngle = rand(seed) * TWO_PI; // pick random point on aperture
+		randomRadius = rand(seed) * uApertureSize;
+		randomAperturePos = ( cos(randomAngle) * camRight + sin(randomAngle) * camUp ) * sqrt(randomRadius);
+		// point on aperture to focal point
+		finalRayDir = normalize(focalPoint - randomAperturePos);
+
+		ray = Ray( cameraPosition + randomAperturePos, finalRayDir );
+
+		// perform path tracing and get resulting pixel color
+		pixelColor = CalculateRadiance( ray, seed );
+		
+		accumColor += pixelColor;
+	}
+
+	accumColor *= (1.0 / uSamplesPerFrame);
+
+	if (uFrameCounter == 1.0) // camera just moved after being still
+	{
+		previousColor = vec3(0); // clear rendering accumulation buffer
+	}
+	else if (uCameraIsMoving)
+	{
+		previousColor *= uFrameBlendingAmount;
+		accumColor *= (1.0 - uFrameBlendingAmount);
+	}
+	
+	pc_fragColor = vec4( previousColor + accumColor, 1.0 );	
+}
